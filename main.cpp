@@ -1,41 +1,23 @@
 #include "mbed.h"
 #include "ultrasonic.h"
 
-//time_t startTime;
-//Timer t;
-//float s;
  void dist(int distance)
 {
-    //float new_s;
-    //new_s = t.read ();
-    //printf("I think %f s passed, current time %f, %f\r\n", (double)(new_s-s), new_s, s);
-    //printf("distance updated %d\r\n", distance);
-    //printf("RTC clock says %d\r\n", (time(NULL)-startTime));
-}
-void startTimer()
-{
-    //s = t.read();
-    //printf("timer started \r\n");
-    //startTime = time(NULL);
-}
-void trigger()
-{
-    //printf("trigger sent\r\n");
+    //put code here to happen when the distance is changed
+    printf("Distance changed to %dmm\r\n", distance);
 }
 
-ultrasonic mu(D8, D9, 1, 2, &dist, &trigger, &startTimer);
+ultrasonic mu(D8, D9, .1, 1, &dist);    //Set the trigger pin to D8 and the echo pin to D9
+                                        //have updates every .1 seconds and a timeout after 1
+                                        //second, and call dist when the distance changes
 
 int main()
 {
-    //t.start();
-    mu.startUpdates();
+    mu.startUpdates();//start mesuring the distance
     while(1)
     {
-        //Do something else
-        //printf("doing something");
-        if(mu.isUpdated())
-        {
-            printf("Distance = %d\r\n", mu.getCurrentDistance());
-        }
+        //Do something else here
+        mu.checkDistance();     //call checkDistance() as much as possible, as this is where
+                                //the class checks if dist needs to be called.
     }
 }
